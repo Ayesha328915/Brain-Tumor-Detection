@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Brain Tumor Detection</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1f4037, #99f2c8);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-card {
+            width: 440px;
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.25);
+            text-align: center;
+        }
+
+        h2 {
+            font-weight: 600;
+            color: #1f4037;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        .upload-box {
+            border: 2px dashed #1f4037;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .btn-predict {
+            background: #1f4037;
+            border: none;
+            border-radius: 12px;
+            padding: 10px;
+            font-weight: 500;
+        }
+
+        .btn-predict:hover {
+            background: #16362f;
+        }
+
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #f8fdfb;
+        }
+
+        .badge-tumor {
+            background: #dc3545;
+        }
+
+        .badge-normal {
+            background: #198754;
+        }
+
+        img {
+            width: 200px;
+            border-radius: 12px;
+            margin-top: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .disclaimer {
+            font-size: 11px;
+            color: #6c757d;
+            margin-top: 15px;
+        }
+
+        /* Loader */
+        .loader {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: #1f4037;
+        }
+    </style>
+
+    <script>
+        function showLoader() {
+            document.getElementById("loader").style.display = "block";
+        }
+    </script>
+</head>
+
+<body>
+
+<div class="main-card">
+
+    <h2>🧠 Brain Tumor Detection</h2>
+    <p class="subtitle">AI-assisted MRI Image Analysis</p>
+
+    <form method="POST" enctype="multipart/form-data" onsubmit="showLoader()">
+        <div class="upload-box">
+            <input type="file" name="image" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-predict w-100 text-white">
+            Analyze MRI
+        </button>
+    </form>
+
+    <!-- Loader -->
+    <div id="loader" class="loader">
+        <div class="spinner-border" role="status"></div>
+        <p class="mt-2">Analyzing image...</p>
+    </div>
+
+    {% if prediction %}
+    <div class="result-box">
+
+        {% if prediction == "Tumor" %}
+            <span class="badge badge-tumor p-2">Tumor Detected</span>
+        {% else %}
+            <span class="badge badge-normal p-2">No Tumor Detected</span>
+        {% endif %}
+
+        {% if confidence %}
+        <p class="mt-2"><b>Confidence:</b> {{ confidence | round(2) }}%</p>
+        {% endif %}
+
+        <img src="{{ img_path }}" alt="MRI Image">
+    </div>
+    {% endif %}
+
+    <p class="disclaimer">
+        ⚠ This system is for educational purposes only and not a substitute for professional medical diagnosis.
+    </p>
+
+</div>
+
+</body>
+</html>
